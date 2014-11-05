@@ -8,7 +8,11 @@ import akka.actor.Props
  */
 class SimpleActor extends Actor {
 
-	println("Simple Actor created");
+	println("Simple Actor created")
+
+	ovverride preStart() = {
+		println("Pre start method")
+	}
 
 	def receive = {
 	  case "test" 	=> println("test message")
