@@ -9,6 +9,7 @@
 	<modules>
 		<module>getting-started</module>
 		<module>actors</module>
+		<module>random-arithmetic-mean</module>
 	</modules>
 
 	<properties>
