@@ -5,15 +5,16 @@ import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.GenerateNumberM
 import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.RandomNumberMessage
 import scala.util.Random
 import akka.actor.actorRef2Scala
+import akka.actor.ActorLogging
 
-class RandomNumberActor extends Actor {
+class RandomNumberActor extends Actor with ActorLogging {
   
   val random = Random
 
   def receive = {
     case GenerateNumberMessage => 
       val randomNumber = random nextInt 11
-      println("Generated number = " + randomNumber);
+      log.info("Generated number = " + randomNumber)
       sender!RandomNumberMessage(randomNumber)
   }
   
