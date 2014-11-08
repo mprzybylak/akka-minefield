@@ -3,6 +3,7 @@ package pl.mprzybylak.minefields.akka.random
 import akka.actor.Actor
 import akka.actor.Props
 import akka.actor.ActorRef
+import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.StartMessage
 import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.GenerateNumberMessage
 import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.RandomNumberMessage
 import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.CalculateMeanMessage
@@ -17,36 +18,35 @@ import scala.util.Random
 
 class MeanActor extends Actor {
 
-  var randomNumberActor:ActorRef = null;
-  var calculateMeanActor:ActorRef = null; 
-  var printActor:ActorRef = null;
-  
-  val numbers:ListBuffer[Int] = ListBuffer.empty
-  
-  override
-  def preStart = {
+  var randomNumberActor: ActorRef = null;
+  var calculateMeanActor: ActorRef = null;
+  var printActor: ActorRef = null;
+
+  val numbers: ListBuffer[Int] = ListBuffer.empty
+
+  def receive = {
+    case StartMessage => handleStart
+    case msg: RandomNumberMessage => handleNumber(msg)
+    case msg: MeanResultMessage => printActor ! PrintResultMessage(msg.mean)
+    case EndProgramMessage => handleEndProgram
+  }
+
+  def handleStart = {
     randomNumberActor = context.actorOf(RandomNumberActor.props(new Random), "generator")
     calculateMeanActor = context.actorOf(Props[CalculateMeanActor], "calculator")
     printActor = context.actorOf(Props[PrinterActor], "printer")
-    
-    randomNumberActor!GenerateNumberMessage
+    randomNumberActor ! GenerateNumberMessage
   }
-  
-  def receive = {
-    case msg:RandomNumberMessage => handleNumber(msg)
-    case msg:MeanResultMessage => printActor ! PrintResultMessage(msg.mean)
-    case EndProgramMessage => handleEndProgram
-  }
-  
-  def handleNumber(msg:RandomNumberMessage) = {
-    if(msg.number != 0) {
+
+  def handleNumber(msg: RandomNumberMessage) = {
+    if (msg.number != 0) {
       numbers += msg.number
-      randomNumberActor!GenerateNumberMessage
-    } else { 
-      calculateMeanActor!CalculateMeanMessage(numbers.toList)
+      randomNumberActor ! GenerateNumberMessage
+    } else {
+      calculateMeanActor ! CalculateMeanMessage(numbers.toList)
     }
   }
-  
+
   def handleEndProgram = {
     context.system.shutdown
   }
