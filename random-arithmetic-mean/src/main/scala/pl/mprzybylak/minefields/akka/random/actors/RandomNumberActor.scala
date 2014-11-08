@@ -6,11 +6,10 @@ import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.RandomNumberMes
 import scala.util.Random
 import akka.actor.actorRef2Scala
 import akka.actor.ActorLogging
+import akka.actor.Props
 
-class RandomNumberActor extends Actor with ActorLogging {
+class RandomNumberActor(random: Random) extends Actor with ActorLogging {
   
-  val random = Random
-
   def receive = {
     case GenerateNumberMessage => 
       val randomNumber = random nextInt 11
@@ -18,4 +17,8 @@ class RandomNumberActor extends Actor with ActorLogging {
       sender!RandomNumberMessage(randomNumber)
   }
   
+}
+
+object RandomNumberActor {
+  def props(random:Random): Props = Props(new RandomNumberActor(random))
 }

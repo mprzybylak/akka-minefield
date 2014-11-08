@@ -13,6 +13,7 @@ import scala.collection.mutable.ListBuffer
 import pl.mprzybylak.minefields.akka.random.actors.CalculateMeanActor
 import pl.mprzybylak.minefields.akka.random.actors.RandomNumberActor
 import pl.mprzybylak.minefields.akka.random.actors.PrinterActor
+import scala.util.Random
 
 class MeanActor extends Actor {
 
@@ -24,7 +25,7 @@ class MeanActor extends Actor {
   
   override
   def preStart = {
-    randomNumberActor = context.actorOf(Props[RandomNumberActor], "generator")
+    randomNumberActor = context.actorOf(RandomNumberActor.props(new Random), "generator")
     calculateMeanActor = context.actorOf(Props[CalculateMeanActor], "calculator")
     printActor = context.actorOf(Props[PrinterActor], "printer")
     
