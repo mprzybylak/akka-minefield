@@ -43,8 +43,14 @@ class MeanActor extends Actor with ActorLogging {
 
   def handleStart = {
     randomNumberActor = context.actorOf(RandomNumberActor.props(new Random), "generator")
+    log.info("random number actor path: " + randomNumberActor.path)
+
     calculateMeanActor = context.actorOf(Props[CalculateMeanActor], "calculator")
+    log.info("random number actor path: " + calculateMeanActor.path)
+    
     printActor = context.actorOf(Props[PrinterActor], "printer")
+    log.info("random number actor path: " + printActor.path)
+
     randomNumberActor ! GenerateNumberMessage
   }
 
