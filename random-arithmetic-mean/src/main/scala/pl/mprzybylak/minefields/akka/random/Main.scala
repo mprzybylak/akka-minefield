@@ -9,8 +9,9 @@ import scala.concurrent.duration._
 
 object Main {
 	def main(args: Array[String]) {
+		import actorSystem.dispatcher
 		val actorSystem = ActorSystem("mean-actor-system");
 		val meanActor = actorSystem.actorOf(Props[MeanActor]); 
-		actorSystem.scheduler.scheduleOnce(0 seconds, meanActor, StartMessage)(actorSystem.dispatcher)
+		actorSystem.scheduler.scheduleOnce(0 seconds, meanActor, StartMessage)
 	}
 }
