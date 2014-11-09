@@ -39,5 +39,10 @@ class RandomNumberActorTest extends TestKit(ActorSystem("mean-actor-system", Con
       }
     }
   }
+  
+  override def afterAll() {
+    super.afterAll()
+    system.shutdown()
+  }
 
 }

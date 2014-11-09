@@ -4,14 +4,13 @@ import akka.actor.ActorSystem
 import pl.mprzybylak.minefields.akka.random.actors.CalculateMeanActor
 import akka.actor.Props
 import pl.mprzybylak.minefields.akka.random.messages.MeanMessage.StartMessage
+import pl.mprzybylak.minefields.akka.random.actors.MeanActor
+import scala.concurrent.duration._
 
 object Main {
 	def main(args: Array[String]) {
-	  
 		val actorSystem = ActorSystem("mean-actor-system");
-		
-		val meanActor = actorSystem.actorOf(Props[MeanActor]);
-		meanActor ! StartMessage;
-	  
+		val meanActor = actorSystem.actorOf(Props[MeanActor]); 
+		actorSystem.scheduler.scheduleOnce(0 seconds, meanActor, StartMessage)(actorSystem.dispatcher)
 	}
 }

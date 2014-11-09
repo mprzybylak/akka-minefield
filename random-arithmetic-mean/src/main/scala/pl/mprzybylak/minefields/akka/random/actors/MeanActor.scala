@@ -1,4 +1,4 @@
-package pl.mprzybylak.minefields.akka.random
+package pl.mprzybylak.minefields.akka.random.actors
 
 import akka.actor.Actor
 import akka.actor.Props
