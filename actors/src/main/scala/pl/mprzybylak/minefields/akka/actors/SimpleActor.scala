@@ -10,7 +10,9 @@ class SimpleActor extends Actor {
 
 	println("Simple Actor created")
 
-	ovverride preStart() = {
+	
+	override 
+	def preStart() = {
 		println("Pre start method")
 	}
 
